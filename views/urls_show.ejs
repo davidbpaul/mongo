@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<body>
+    <!-- Write EJS code here to display shortened links -->
+table>
+<% for (url in shortURL) { %>
+   <tr>
+     <td><%= shortURL[url] %>
+
+     </td>
+      <form method="POST" action="/urls/<%= url %>?_method=PUT">
+
+       <button type="submit">Update</button>
+    </form>
+      <form method="POST" action="/urls/<%= url %>?_method=DELETE">
+
+       <button type="submit">Delete</button>
+    </form>
+   </tr>
+<% } %>
+</table>
+
+</body>
+</html>
