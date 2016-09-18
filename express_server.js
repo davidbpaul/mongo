@@ -1,6 +1,7 @@
 'use strict'
 
 //setting up
+require('dotenv').config();
 const express = require("express");
 const app = express();
 const methodOverride = require('method-override')
@@ -15,7 +16,7 @@ app.use(methodOverride('_method'));
 const assert = require('assert');
 const MongoClient = require("mongodb").MongoClient;
 const objectID = require("mongodb").ObjectID;
-const MONGODB_URI = "mongodb://127.0.0.1:27017/url_shortener";
+const MONGODB_URI = process.env.MONGODB_URI
 
 console.log(`Connecting to MongoDB running at: ${MONGODB_URI}`);
 let collection = null;
