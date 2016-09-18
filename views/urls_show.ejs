@@ -2,22 +2,22 @@
 <html lang="en">
 <body>
     <!-- Write EJS code here to display shortened links -->
-table>
-<% for (url in shortURL) { %>
+<table>
+
    <tr>
-     <td><%= shortURL[url] %>
+     <td><%= shortURL %>
 
      </td>
-      <form method="POST" action="/urls/<%= url %>?_method=PUT">
+      <form method="POST" action="/urls/<%= longURL %>?_method=PUT">
 
        <button type="submit">Update</button>
     </form>
-      <form method="POST" action="/urls/<%= url %>?_method=DELETE">
+
+      <form method="POST" action="/urls/<%= shortURL %>?_method=DELETE">
 
        <button type="submit">Delete</button>
     </form>
    </tr>
-<% } %>
 </table>
 
 </body>
