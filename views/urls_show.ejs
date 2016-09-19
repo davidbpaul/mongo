@@ -2,6 +2,7 @@
 <html lang="en">
 <body>
     <!-- Write EJS code here to display shortened links -->
+    <h1>Short URL</h1>
 <table>
 
    <tr>
@@ -9,7 +10,7 @@
 
      </td>
       <form method="POST" action="/urls/<%= shortURL %>?_method=PUT">
-        <input id="longURL" type="text" name="longURL" placeholder="http://" style="width: 300px">
+        <input id="longURL" type="text" name="longURL" placeholder="http://<%= longURL %>" style="width: 300px">
        <button type="submit">Update</button>
     </form>
 
