@@ -1,7 +1,6 @@
 'use strict'
-
-//setting up
 require('dotenv').config();
+//setting up
 const express = require("express");
 const app = express();
 const methodOverride = require('method-override')
@@ -49,7 +48,7 @@ app.get("/hello", (req, res) => {
 
 app.get("/urls", (req, res) => {
   MongoClient.connect(MONGODB_URI, (err, db) => {
-    collection.find( {"shortURL": req.params.shortURL}, (err, result) => {
+    collection.find().toArray((err, result) => {
       let longURL = result;
       let templateVars = {
         shortURL:req.params.shortURL,

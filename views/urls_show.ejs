@@ -8,8 +8,8 @@
      <td><%= shortURL %>
 
      </td>
-      <form method="POST" action="/urls/<%= longURL %>?_method=PUT">
-
+      <form method="POST" action="/urls/<%= shortURL %>?_method=PUT">
+        <input id="longURL" type="text" name="longURL" placeholder="http://" style="width: 300px">
        <button type="submit">Update</button>
     </form>
 

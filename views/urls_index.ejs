@@ -4,16 +4,18 @@
     <!-- Write EJS code here to display shortened links -->
 
 <table>
+
    <tr>
-     <td><%= longURL %>
+     <td><% longURL.forEach(function(url){ %>
 
-     <a href ="http://localhost:8080/urls/<%= shortURL %>">Edit</a>
-     <a href ="http://localhost:8080/urls/new"><%= shortURL %></a>
-        <form method="POST" action="/urls/<%= shortURL %>?_method=DELETE">
-
+      <p><%= url.shortURL %> : <%= url.longURL %></p>
+      <a href ="http://localhost:8080/urls/<%= url.shortURL %>">Edit</a>
+      <a href ="http://localhost:8080/urls/new">new</a>
+     <!--  <form method="POST" action="/urls/<%= url.shortURL %> : <%= url.longURL %>?_method=DELETE">
        <button type="submit">Delete</button>
-    </form>
-     </td>
+    </form> -->
+     <% }) %>
+    </td>
    </tr>
 </table>
 </body>
