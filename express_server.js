@@ -2,33 +2,35 @@
 require('dotenv').config();
 //setting up
 const express = require("express");
+const connect = require('connect');
 const app = express();
 const methodOverride = require('method-override')
-const connect = require('connect');
-app.set("view engine", "ejs");
 const bodyParser = require("body-parser");
+const MongoClient = require("mongodb").MongoClient;
+const objectID = require("mongodb").ObjectID;
+const assert = require('assert');
+
+app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded());
 const PORT = process.env.PORT || 8080; // default port 8080
 app.use(methodOverride('_method'));
-//server
-const assert = require('assert');
-const MongoClient = require("mongodb").MongoClient;
-const objectID = require("mongodb").ObjectID;
 const MONGODB_URI = process.env.MONGODB_URI
 console.log(`Connecting to MongoDB running at: ${MONGODB_URI}`);
 
 
+//redirects home(/) to (/new)
 app.get("/", (req, res) => {
-res.redirect(`http://localhost:8080/urls/new`);
+  res.redirect('http://localhost:8080/urls/new');
 });
+//easteregg
 app.get("/hello", (req, res) => {
   res.end("<html><body>Hello <b>World</b></body></html>\n");
 });
 
+//gets urls from database and prints them to page
 app.get("/urls", (req, res) => {
   MongoClient.connect(MONGODB_URI, (err, db) => {
-    let collection = db.collection("urls");
-    collection.find().toArray((err, result) => {
+   db.collection("urls").find().toArray((err, result) => {
       let longURL = result;
       let templateVars = {
         shortURL:req.params.shortURL,
@@ -39,11 +41,12 @@ app.get("/urls", (req, res) => {
     })
     })
 });
-
+//user can input a url
 app.get("/urls/new", (req, res) => {
   res.render("urls_new");
 });
 
+//get a specific shorturls info
 app.get("/urls/:shortURL", (req, res) => {
   MongoClient.connect(MONGODB_URI, (err, db) => {
     let collection = db.collection("urls");
@@ -53,19 +56,18 @@ app.get("/urls/:shortURL", (req, res) => {
         longURL:longURL
       };
       res.render("urls_show", templateVars);
-   // console.log(longURL)
     });
  });
 });
 
 
-
+//once a url is submitted its entered into database and a new short is created
 app.post("/urls", (req, res, next) => {
   MongoClient.connect(MONGODB_URI, (err, db) => {
     let collection = db.collection("urls");
-    let random =Math.random().toString(36).substr(2, 6);
+    let random = Math.random().toString(36).substr(2, 6);
 
-    let item ={
+    let item = {
       longURL: req.body.longURL,
       shortURL:random
     }
@@ -78,22 +80,22 @@ app.post("/urls", (req, res, next) => {
   })
 })
 
-
+//get url specific information
 app.get("/u/:shortURL", (req, res) => {
   MongoClient.connect(MONGODB_URI, (err, db) => {
      let collection = db.collection("urls");
-  res.redirect(req.body.longURL);
-});
+        res.redirect(req.body.longURL);
+  });
 });
 
+//open port
 app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}!`);
 });
 
-
+//delete a url in database
 app.delete("/urls/:shortURL", (req, res)=>{
    MongoClient.connect(MONGODB_URI, (err, db) => {
-     let shortURL = req.body.shortURL;
      let collection = db.collection("urls");
      collection.deleteOne({"shortURL": req.params.shortURL},function (err, result) {
        console.log('item deleted');
@@ -102,12 +104,13 @@ app.delete("/urls/:shortURL", (req, res)=>{
 })
 })
 
+//change url
 app.put("/urls/:shortURL", (req, res)=>{
    MongoClient.connect(MONGODB_URI, (err, db) => {
      let collection = db.collection("urls");
-     let random =Math.random().toString(36).substr(2, 6);
+     let random = Math.random().toString(36).substr(2, 6);
      let shortURL = req.body.shortURL
-     let item ={
+     let item = {
         longURL :req.body.longURL,
         shortURL:random
       };
@@ -119,6 +122,8 @@ app.put("/urls/:shortURL", (req, res)=>{
   })
 })
  })
+
+//function to get long url
 function getLongURL(shortURL, cb) {
   MongoClient.connect(MONGODB_URI, (err, db) => {
     let collection = db.collection("urls");
